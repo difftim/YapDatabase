@@ -125,14 +125,14 @@ extension YapDatabaseViewTransaction {
 		self.__enumerateKeysAndMetadata(inGroup: group, with: options, range: range, using: enumBlock)
 	}
 	
-	public func iterateKeysAndObjects(inGroup group: String, using block: (String, String, Any, Int, inout Bool) -> Void) {
+	public func iterateKeysAndObjects(inGroup group: String, using block: (String, String, Any?, Int, inout Bool) -> Void) {
 		
 		self.iterateKeysAndObjects(inGroup: group, reversed: false, using: block)
 	}
 	
-	public func iterateKeysAndObjects(inGroup group: String, reversed: Bool, using block: (String, String, Any, Int, inout Bool) -> Void) {
+	public func iterateKeysAndObjects(inGroup group: String, reversed: Bool, using block: (String, String, Any?, Int, inout Bool) -> Void) {
 		
-		let enumBlock = {(collection: String, key: String, object: Any, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
+		let enumBlock = {(collection: String, key: String, object: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
 			
 			var innerStop = false
 			block(collection, key, object, Int(index), &innerStop)
@@ -148,7 +148,7 @@ extension YapDatabaseViewTransaction {
 	
 	public func iterateKeysAndObjects(inGroup group: String, reversed: Bool, range: NSRange, using block: (String, String, Any?, Int, inout Bool) -> Void) {
 		
-		let enumBlock = {(collection: String, key: String, object: Any, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
+		let enumBlock = {(collection: String, key: String, object: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
 			
 			var innerStop = false
 			block(collection, key, object, Int(index), &innerStop)
@@ -167,9 +167,9 @@ extension YapDatabaseViewTransaction {
 		self.iterateRows(inGroup: group, reversed: false, using: block)
 	}
 	
-	public func iterateRows(inGroup group: String, reversed: Bool, using block: (String, String, Any, Any?, Int, inout Bool) -> Void) {
+	public func iterateRows(inGroup group: String, reversed: Bool, using block: (String, String, Any?, Any?, Int, inout Bool) -> Void) {
 		
-		let enumBlock = {(collection: String, key: String, object: Any, metadata: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
+		let enumBlock = {(collection: String, key: String, object: Any?, metadata: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
 			
 			var innerStop = false
 			block(collection, key, object, metadata, Int(index), &innerStop)
@@ -183,9 +183,9 @@ extension YapDatabaseViewTransaction {
 		self.__enumerateRows(inGroup: group, with: options, using: enumBlock)
 	}
 	
-	public func iterateRows(inGroup group: String, reversed: Bool, range: NSRange, using block: (String, String, Any, Any?, Int, inout Bool) -> Void) {
+	public func iterateRows(inGroup group: String, reversed: Bool, range: NSRange, using block: (String, String, Any?, Any?, Int, inout Bool) -> Void) {
 		
-		let enumBlock = {(collection: String, key: String, object: Any, metadata: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
+		let enumBlock = {(collection: String, key: String, object: Any?, metadata: Any?, index: UInt, outerStop: UnsafeMutablePointer<ObjCBool>) -> Void in
 			
 			var innerStop = false
 			block(collection, key, object, metadata, Int(index), &innerStop)

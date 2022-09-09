@@ -306,20 +306,20 @@ NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
                            withOptions:(NSEnumerationOptions)options
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
                            withOptions:(NSEnumerationOptions)options
                                  range:(NSRange)range
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
@@ -328,7 +328,7 @@ NS_REFINED_FOR_SWIFT;
                                 filter:
             (BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block;
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block;
 
 /**
  * The following methods are similar to invoking the enumerateKeysInGroup:... methods,
@@ -337,20 +337,20 @@ NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateRowsInGroup:(NSString *)group
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateRowsInGroup:(NSString *)group
                  withOptions:(NSEnumerationOptions)options
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateRowsInGroup:(NSString *)group
                  withOptions:(NSEnumerationOptions)options
                        range:(NSRange)range
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, __nullable id metadata, NSUInteger index, BOOL *stop))block
 NS_REFINED_FOR_SWIFT;
 
 - (void)enumerateRowsInGroup:(NSString *)group
@@ -359,7 +359,7 @@ NS_REFINED_FOR_SWIFT;
                       filter:
             (BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, __nullable id metadata, NSUInteger index, BOOL *stop))block;
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, __nullable id metadata, NSUInteger index, BOOL *stop))block;
 
 @end
 
