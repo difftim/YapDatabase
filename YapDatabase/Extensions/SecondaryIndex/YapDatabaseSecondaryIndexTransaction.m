@@ -331,8 +331,8 @@ static NSString *const ext_key_version_deprecated = @"version";
 		__unsafe_unretained YapDatabaseSecondaryIndexWithObjectBlock secondaryIndexBlock =
 		    (YapDatabaseSecondaryIndexWithObjectBlock)handler->block;
 		
-		void (^enumBlock)(int64_t rowid, NSString *collection, NSString *key, id object, BOOL *stop);
-		enumBlock = ^(int64_t rowid, NSString *collection, NSString *key, id object, BOOL __unused *stop) {
+		void (^enumBlock)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop);
+		enumBlock = ^(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL __unused *stop) {
 			
 			secondaryIndexBlock(databaseTransaction, parentConnection->blockDict, collection, key, object);
 			
@@ -397,8 +397,8 @@ static NSString *const ext_key_version_deprecated = @"version";
 		__unsafe_unretained YapDatabaseSecondaryIndexWithRowBlock secondaryIndexBlock =
 		    (YapDatabaseSecondaryIndexWithRowBlock)handler->block;
 		
-		void (^enumBlock)(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop);
-		enumBlock = ^(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL __unused *stop) {
+		void (^enumBlock)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop);
+		enumBlock = ^(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL __unused *stop) {
 			
 			secondaryIndexBlock(databaseTransaction, parentConnection->blockDict, collection, key, object, metadata);
 			
@@ -916,7 +916,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		return;
 	}
 	
-	id object = nil;
+	__nullable id object = nil;
 	if (handler->blockType & YapDatabaseBlockType_ObjectFlag)
 	{
 		object = [databaseTransaction objectForCollectionKey:collectionKey withRowid:rowid];
@@ -945,7 +945,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		return;
 	}
 	
-	id object = nil;
+	__nullable id object = nil;
 	if (handler->blockType & YapDatabaseBlockType_ObjectFlag)
 	{
 		object = [databaseTransaction objectForCollectionKey:collectionKey withRowid:rowid];
@@ -980,7 +980,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		return;
 	}
 	
-	id object = nil;
+	__nullable id object = nil;
 	if (handler->blockType & YapDatabaseBlockType_ObjectFlag)
 	{
 		object = [databaseTransaction objectForCollectionKey:collectionKey withRowid:rowid];
@@ -1016,7 +1016,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		return;
 	}
 	
-	id object = nil;
+	__nullable id object = nil;
 	if (handler->blockType & YapDatabaseBlockType_ObjectFlag)
 	{
 		object = [databaseTransaction objectForCollectionKey:collectionKey withRowid:rowid];
@@ -1273,7 +1273,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 
 - (BOOL)enumerateKeysAndObjectsMatchingQuery:(YapDatabaseQuery *)query
                                   usingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
 {
 	BOOL result = [self _enumerateRowidsMatchingQuery:query usingBlock:^(int64_t rowid, BOOL *stop) {
 		
@@ -1284,7 +1284,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		}
 		
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object forRowid:rowid];
 		
 		block(ck.collection, ck.key, object, stop);
@@ -1295,7 +1295,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 
 - (BOOL)enumerateRowsMatchingQuery:(YapDatabaseQuery *)query
                         usingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	BOOL result = [self _enumerateRowidsMatchingQuery:query usingBlock:^(int64_t rowid, BOOL *stop) {
 		
@@ -1306,7 +1306,7 @@ static NSString *const ext_key_version_deprecated = @"version";
 		}
 		
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		id metadata = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object metadata:&metadata forRowid:rowid];
 		

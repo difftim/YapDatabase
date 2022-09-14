@@ -1309,6 +1309,14 @@
 		
 		NSString *pageKey = pageMetadata->pageKey;
 		YapDatabaseViewPage *page = [self pageForPageKey:pageKey];
+        
+        NSAssert(page != nil, @"Missing page in group(%@)", group);
+        
+        if (!page) {
+            YDBLogError(@"Missing page in group(%@)! Error inserting key(%@) collection(%@) in group(%@) at index(%lu) with page(nil) pageOffset(%lu)", group, collectionKey.key, collectionKey.collection, group, index, pageOffset);
+            return;
+        }
+
 		
 		YDBLogVerbose(@"Inserting key(%@) collection(%@) in group(%@) at index(%lu) with page(%@) pageOffset(%lu)",
 		              collectionKey.key, collectionKey.collection, group,
@@ -3446,14 +3454,14 @@
 
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
 	[self enumerateRowidsInGroup:group usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop) {
 		
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object forRowid:rowid];
 		
 		block(ck.collection, ck.key, object, index, stop);
@@ -3463,7 +3471,7 @@
 - (void)enumerateKeysAndObjectsInGroup:(NSString *)group
                            withOptions:(NSEnumerationOptions)options
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
@@ -3472,7 +3480,7 @@
 	                  usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop)
 	{
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object forRowid:rowid];
 		
 		block(ck.collection, ck.key, object, index, stop);
@@ -3483,7 +3491,7 @@
                            withOptions:(NSEnumerationOptions)options
                                  range:(NSRange)range
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
@@ -3493,7 +3501,7 @@
 	                  usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop)
 	{
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object forRowid:rowid];
 		
 		block(ck.collection, ck.key, object, index, stop);
@@ -3506,7 +3514,7 @@
                                 filter:
             (BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
                             usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, NSUInteger index, BOOL *stop))block
 {
 	if (filter == NULL) {
 		[self enumerateKeysAndObjectsInGroup:group withOptions:options range:range usingBlock:block];
@@ -3522,7 +3530,7 @@
 		YapCollectionKey *ck = [self->databaseTransaction collectionKeyForRowid:rowid];
 		if (filter(ck.collection, ck.key))
 		{
-			id object = [self->databaseTransaction objectForCollectionKey:ck withRowid:rowid];
+			__nullable id object = [self->databaseTransaction objectForCollectionKey:ck withRowid:rowid];
 			
 			block(ck.collection, ck.key, object, index, stop);
 		}
@@ -3536,14 +3544,14 @@
 
 - (void)enumerateRowsInGroup:(NSString *)group
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
 	[self enumerateRowidsInGroup:group usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop) {
 		
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		id metadata = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object metadata:&metadata forRowid:rowid];
 		
@@ -3554,7 +3562,7 @@
 - (void)enumerateRowsInGroup:(NSString *)group
                  withOptions:(NSEnumerationOptions)options
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
@@ -3563,7 +3571,7 @@
 	                  usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop)
 	{
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		id metadata = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object metadata:&metadata forRowid:rowid];
 		
@@ -3575,7 +3583,7 @@
                  withOptions:(NSEnumerationOptions)options
                        range:(NSRange)range
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, NSUInteger index, BOOL *stop))block
 {
 	if (block == NULL) return;
 	
@@ -3585,7 +3593,7 @@
 	                  usingBlock:^(int64_t rowid, NSUInteger index, BOOL *stop)
 	{
 		YapCollectionKey *ck = nil;
-		id object = nil;
+		__nullable id object = nil;
 		id metadata = nil;
 		[self->databaseTransaction getCollectionKey:&ck object:&object metadata:&metadata forRowid:rowid];
 		
@@ -3599,7 +3607,7 @@
                       filter:
             (BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
                   usingBlock:
-            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop))block
+            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, NSUInteger index, BOOL *stop))block
 {
 	if (filter == NULL) {
 		[self enumerateRowsInGroup:group withOptions:options range:range usingBlock:block];
@@ -3615,7 +3623,7 @@
 		YapCollectionKey *ck = [self->databaseTransaction collectionKeyForRowid:rowid];
 		if (filter(ck.collection, ck.key))
 		{
-			id object = nil;
+			__nullable id object = nil;
 			id metadata = nil;
 			[self->databaseTransaction getObject:&object metadata:&metadata forCollectionKey:ck withRowid:rowid];
 			
@@ -3819,7 +3827,7 @@
 	NSUInteger section = [indexPath indexAtPosition:0];
 	NSUInteger row = [indexPath indexAtPosition:1];
 	
-	id object = nil;
+	__nullable id object = nil;
 	
 	int64_t rowid = 0;
 	YapCollectionKey *ck = nil;
@@ -3848,7 +3856,7 @@
 **/
 - (id)objectAtRow:(NSUInteger)row inSection:(NSUInteger)section withMappings:(YapDatabaseViewMappings *)mappings
 {
-	id object = nil;
+	__nullable id object = nil;
 	
 	int64_t rowid = 0;
 	YapCollectionKey *ck = nil;

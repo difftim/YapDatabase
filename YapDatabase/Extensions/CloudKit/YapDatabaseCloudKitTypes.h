@@ -36,7 +36,7 @@ typedef void (^YapDatabaseCloudKitRecordWithKeyBlock)
 
 typedef void (^YapDatabaseCloudKitRecordWithObjectBlock)
     (YapDatabaseReadTransaction *transaction, CKRecord *_Nullable *_Nonnull inOutRecordPtr, YDBCKRecordInfo *recordInfo,
-     NSString *collection, NSString *key, id object);
+     NSString *collection, NSString *key, __nullable id object);
 
 typedef void (^YapDatabaseCloudKitRecordWithMetadataBlock)
     (YapDatabaseReadTransaction *transaction, CKRecord *_Nullable *_Nonnull inOutRecordPtr, YDBCKRecordInfo *recordInfo,
@@ -44,7 +44,7 @@ typedef void (^YapDatabaseCloudKitRecordWithMetadataBlock)
 
 typedef void (^YapDatabaseCloudKitRecordWithRowBlock)
 (YapDatabaseReadTransaction *transaction, CKRecord *_Nullable *_Nonnull inOutRecordPtr, YDBCKRecordInfo *recordInfo,
-     NSString *collection, NSString *key, id object, __nullable id metadata);
+     NSString *collection, NSString *key, __nullable id object, __nullable id metadata);
 
 + (instancetype)withKeyBlock:(YapDatabaseCloudKitRecordWithKeyBlock)recordBlock;
 + (instancetype)withObjectBlock:(YapDatabaseCloudKitRecordWithObjectBlock)recordBlock;

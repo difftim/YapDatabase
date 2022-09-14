@@ -33,7 +33,7 @@ typedef BOOL (^YapDatabaseViewFilteringWithKeyBlock)
 
 typedef BOOL (^YapDatabaseViewFilteringWithObjectBlock)
                 (YapDatabaseReadTransaction *transaction, NSString *group,
-                   NSString *collection, NSString *key, id object);
+                   NSString *collection, NSString *key, __nullable id object);
 
 typedef BOOL (^YapDatabaseViewFilteringWithMetadataBlock)
                 (YapDatabaseReadTransaction *transaction, NSString *group,
@@ -41,7 +41,7 @@ typedef BOOL (^YapDatabaseViewFilteringWithMetadataBlock)
 
 typedef BOOL (^YapDatabaseViewFilteringWithRowBlock)
                 (YapDatabaseReadTransaction *transaction, NSString *group,
-                   NSString *collection, NSString *key, id object, __nullable id metadata);
+                   NSString *collection, NSString *key, __nullable id object, __nullable id metadata);
 
 + (instancetype)withKeyBlock:(YapDatabaseViewFilteringWithKeyBlock)block;
 + (instancetype)withObjectBlock:(YapDatabaseViewFilteringWithObjectBlock)block;

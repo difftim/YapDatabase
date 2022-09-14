@@ -28,13 +28,13 @@ typedef void (^YapDatabaseSecondaryIndexWithKeyBlock)
                             (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key);
 
 typedef void (^YapDatabaseSecondaryIndexWithObjectBlock)
-                            (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key, id object);
+                            (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key, __nullable id object);
 
 typedef void (^YapDatabaseSecondaryIndexWithMetadataBlock)
                             (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key, __nullable id metadata);
 
 typedef void (^YapDatabaseSecondaryIndexWithRowBlock)
-                            (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key, id object, __nullable id metadata);
+                            (YapDatabaseReadTransaction *transaction, NSMutableDictionary *dict, NSString *collection, NSString *key, __nullable id object, __nullable id metadata);
 
 + (instancetype)withKeyBlock:(YapDatabaseSecondaryIndexWithKeyBlock)block;
 + (instancetype)withObjectBlock:(YapDatabaseSecondaryIndexWithObjectBlock)block;

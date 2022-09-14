@@ -463,7 +463,7 @@
 	YapCollectionKey *collectionKey = [self collectionKeyForRowid:rowid];
 	if (collectionKey)
 	{
-		id object = [self objectForCollectionKey:collectionKey withRowid:rowid];
+		__nullable id object = [self objectForCollectionKey:collectionKey withRowid:rowid];
 	
 		if (collectionKeyPtr) *collectionKeyPtr = collectionKey;
 		if (objectPtr) *objectPtr = object;
@@ -566,7 +566,7 @@
 {
 	if (cacheKey == nil) return nil;
 	
-	id object = [connection->objectCache objectForKey:cacheKey];
+	__nullable id object = [connection->objectCache objectForKey:cacheKey];
 	if (object)
 		return object;
 	
@@ -685,7 +685,7 @@
 {
 	BOOL found = NO;
 	
-	id object = [connection->objectCache objectForKey:cacheKey];
+	__nullable id object = [connection->objectCache objectForKey:cacheKey];
 	id metadata = [connection->metadataCache objectForKey:cacheKey];
 	
 	if (object || metadata)
@@ -806,7 +806,7 @@
 	
 	YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 	
-	id object = [connection->objectCache objectForKey:cacheKey];
+	__nullable id object = [connection->objectCache objectForKey:cacheKey];
 	if (object)
 		return object;
 	
@@ -1036,7 +1036,7 @@
 	
 	YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 	
-	id object = [connection->objectCache objectForKey:cacheKey];
+	__nullable id object = [connection->objectCache objectForKey:cacheKey];
 	id metadata = [connection->metadataCache objectForKey:cacheKey];
 	
 	BOOL found = NO;
@@ -1700,7 +1700,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)enumerateKeysAndObjectsInCollection:(NSString *)collection
-                                 usingBlock:(void (NS_NOESCAPE^)(NSString *key, id object, BOOL *stop))block
+                                 usingBlock:(void (NS_NOESCAPE^)(NSString *key, __nullable id object, BOOL *stop))block
 {
 	[self enumerateKeysAndObjectsInCollection:collection usingBlock:block withFilter:NULL];
 }
@@ -1714,7 +1714,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)enumerateKeysAndObjectsInCollection:(NSString *)collection
-                                 usingBlock:(void (NS_NOESCAPE^)(NSString *key, id object, BOOL *stop))block
+                                 usingBlock:(void (NS_NOESCAPE^)(NSString *key, __nullable id object, BOOL *stop))block
                                  withFilter:(BOOL (NS_NOESCAPE^)(NSString *key))filter
 {
 	if (block == NULL) return;
@@ -1722,7 +1722,7 @@
 	if (filter)
 	{
 		[self _enumerateKeysAndObjectsInCollection:collection
-		                                usingBlock:^(int64_t __unused rowid, NSString *key, id object, BOOL *stop) {
+		                                usingBlock:^(int64_t __unused rowid, NSString *key, __nullable id object, BOOL *stop) {
 			
 			block(key, object, stop);
 			
@@ -1734,7 +1734,7 @@
 	else
 	{
 		[self _enumerateKeysAndObjectsInCollection:collection
-		                                usingBlock:^(int64_t __unused rowid, NSString *key, id object, BOOL *stop) {
+		                                usingBlock:^(int64_t __unused rowid, NSString *key, __nullable id object, BOOL *stop) {
 			
 			block(key, object, stop);
 			
@@ -1753,7 +1753,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
 {
 	[self enumerateKeysAndObjectsInAllCollectionsUsingBlock:block withFilter:NULL];
 }
@@ -1770,7 +1770,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
                  withFilter:(BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -1778,7 +1778,7 @@
 	if (filter)
 	{
 		[self _enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-		    ^(int64_t __unused rowid, NSString *collection, NSString *key, id object, BOOL *stop) {
+		    ^(int64_t __unused rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop) {
 			
 			block(collection, key, object, stop);
 			
@@ -1790,7 +1790,7 @@
 	else
 	{
 		[self _enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-		    ^(int64_t __unused rowid, NSString *collection, NSString *key, id object, BOOL *stop) {
+		    ^(int64_t __unused rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop) {
 			
 			block(collection, key, object, stop);
 			
@@ -1921,7 +1921,7 @@
  * allowing you to skip the serialization step for those rows you're not interested in.
 **/
 - (void)enumerateRowsInCollection:(NSString *)collection
-                       usingBlock:(void (NS_NOESCAPE^)(NSString *key, id object, id metadata, BOOL *stop))block
+                       usingBlock:(void (NS_NOESCAPE^)(NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	[self enumerateRowsInCollection:collection usingBlock:block withFilter:NULL];
 }
@@ -1935,7 +1935,7 @@
  * which avoids the cost associated with deserializing the object & metadata.
 **/
 - (void)enumerateRowsInCollection:(NSString *)collection
-                       usingBlock:(void (NS_NOESCAPE^)(NSString *key, id object, id metadata, BOOL *stop))block
+                       usingBlock:(void (NS_NOESCAPE^)(NSString *key, __nullable id object, id metadata, BOOL *stop))block
                        withFilter:(BOOL (NS_NOESCAPE^)(NSString *key))filter
 {
 	if (block == NULL) return;
@@ -1943,7 +1943,7 @@
 	if (filter)
 	{
 		[self _enumerateRowsInCollection:collection
-		                      usingBlock:^(int64_t __unused rowid, NSString *key, id object, id metadata, BOOL *stop) {
+		                      usingBlock:^(int64_t __unused rowid, NSString *key, __nullable id object, id metadata, BOOL *stop) {
 			
 			block(key, object, metadata, stop);
 			
@@ -1955,7 +1955,7 @@
 	else
 	{
 		[self _enumerateRowsInCollection:collection
-		                      usingBlock:^(int64_t __unused rowid, NSString *key, id object, id metadata, BOOL *stop) {
+		                      usingBlock:^(int64_t __unused rowid, NSString *key, __nullable id object, id metadata, BOOL *stop) {
 			
 			block(key, object, metadata, stop);
 			
@@ -1974,7 +1974,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)enumerateRowsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	[self enumerateRowsInAllCollectionsUsingBlock:block withFilter:NULL];
 }
@@ -1991,7 +1991,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)enumerateRowsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
                  withFilter:(BOOL (NS_NOESCAPE^)(NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -1999,7 +1999,7 @@
 	if (filter)
 	{
 		[self _enumerateRowsInAllCollectionsUsingBlock:
-		    ^(int64_t __unused rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop) {
+		    ^(int64_t __unused rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop) {
 			
 			block(collection, key, object, metadata, stop);
 			
@@ -2011,7 +2011,7 @@
 	else
 	{
 		[self _enumerateRowsInAllCollectionsUsingBlock:
-		    ^(int64_t __unused rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop) {
+		    ^(int64_t __unused rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop) {
 			
 			block(collection, key, object, metadata, stop);
 			
@@ -2033,7 +2033,7 @@
 **/
 - (void)enumerateObjectsForKeys:(NSArray *)keys
                    inCollection:(NSString *)collection
-            unorderedUsingBlock:(void (NS_NOESCAPE^)(NSUInteger keyIndex, id object, BOOL *stop))block
+            unorderedUsingBlock:(void (NS_NOESCAPE^)(NSUInteger keyIndex, __nullable id object, BOOL *stop))block
 {
 	if (block == NULL) return;
 	if ([keys count] == 0) return;
@@ -2051,7 +2051,7 @@
 	{
 		YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 		
-		id object = [connection->objectCache objectForKey:cacheKey];
+		__nullable id object = [connection->objectCache objectForKey:cacheKey];
 		if (object)
 		{
 			block(keyIndex, object, &stop);
@@ -2167,7 +2167,7 @@
 			int blobSize = sqlite3_column_bytes(statement, column_idx_data);
 			
 			NSData *objectData = [NSData dataWithBytesNoCopy:(void *)blob length:blobSize freeWhenDone:NO];
-			id object = connection->database->objectDeserializer(collection, key, objectData);
+			__nullable id object = connection->database->objectDeserializer(collection, key, objectData);
 			
 			if (object)
 			{
@@ -2453,7 +2453,7 @@
 **/
 - (void)enumerateRowsForKeys:(NSArray *)keys
                 inCollection:(NSString *)collection
-         unorderedUsingBlock:(void (NS_NOESCAPE^)(NSUInteger keyIndex, id object, id metadata, BOOL *stop))block
+         unorderedUsingBlock:(void (NS_NOESCAPE^)(NSUInteger keyIndex, __nullable id object, id metadata, BOOL *stop))block
 {
 	if (block == NULL) return;
 	if ([keys count] == 0) return;
@@ -2471,7 +2471,7 @@
 	{
 		YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 		
-		id object = [connection->objectCache objectForKey:cacheKey];
+		__nullable id object = [connection->objectCache objectForKey:cacheKey];
 		if (object)
 		{
 			id metadata = [connection->metadataCache objectForKey:cacheKey];
@@ -2598,7 +2598,7 @@
 			
 			YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 			
-			id object = [connection->objectCache objectForKey:cacheKey];
+			__nullable id object = [connection->objectCache objectForKey:cacheKey];
 			if (object == nil)
 			{
 				const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -2883,7 +2883,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)_enumerateKeysAndObjectsInCollection:(NSString *)collection
-                                  usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, id object, BOOL *stop))block
+                                  usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, __nullable id object, BOOL *stop))block
 {
 	[self _enumerateKeysAndObjectsInCollection:collection usingBlock:block withFilter:NULL];
 }
@@ -2897,7 +2897,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)_enumerateKeysAndObjectsInCollection:(NSString *)collection
-                                  usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, id object, BOOL *stop))block
+                                  usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, __nullable id object, BOOL *stop))block
                                   withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -2937,7 +2937,7 @@
 		{
 			YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 			
-			id object = [connection->objectCache objectForKey:cacheKey];
+			__nullable id object = [connection->objectCache objectForKey:cacheKey];
 			if (object == nil)
 			{
 				const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -2994,7 +2994,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)_enumerateKeysAndObjectsInCollections:(NSArray *)collections usingBlock:
-                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
 {
 	[self _enumerateKeysAndObjectsInCollections:collections usingBlock:block withFilter:NULL];
 }
@@ -3008,7 +3008,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)_enumerateKeysAndObjectsInCollections:(NSArray *)collections
-                 usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, BOOL *stop))block
+                 usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
                  withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -3050,7 +3050,7 @@
 			{
 				YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 				
-				id object = [connection->objectCache objectForKey:cacheKey];
+				__nullable id object = [connection->objectCache objectForKey:cacheKey];
 				if (object == nil)
 				{
 					const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -3118,7 +3118,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)_enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
 {
 	[self _enumerateKeysAndObjectsInAllCollectionsUsingBlock:block withFilter:NULL];
 }
@@ -3135,7 +3135,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)_enumerateKeysAndObjectsInAllCollectionsUsingBlock:
-                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, BOOL *stop))block
+                            (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, BOOL *stop))block
                  withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -3177,7 +3177,7 @@
 		{
 			YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 			
-			id object = [connection->objectCache objectForKey:cacheKey];
+			__nullable id object = [connection->objectCache objectForKey:cacheKey];
 			if (object == nil)
 			{
 				const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -3610,7 +3610,7 @@
  * allowing you to skip the serialization step for those rows you're not interested in.
 **/
 - (void)_enumerateRowsInCollection:(NSString *)collection
-                        usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, id object, id metadata, BOOL *stop))block
+                        usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	[self _enumerateRowsInCollection:collection usingBlock:block withFilter:NULL];
 }
@@ -3624,7 +3624,7 @@
  * which avoids the cost associated with deserializing the object & metadata.
 **/
 - (void)_enumerateRowsInCollection:(NSString *)collection
-                        usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, id object, id metadata, BOOL *stop))block
+                        usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *key, __nullable id object, id metadata, BOOL *stop))block
                         withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -3666,7 +3666,7 @@
 		{
 			YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 			
-			id object = [connection->objectCache objectForKey:cacheKey];
+			__nullable id object = [connection->objectCache objectForKey:cacheKey];
 			if (object == nil)
 			{
 				const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -3760,7 +3760,7 @@
  * allowing you to skip the serialization step for those rows you're not interested in.
 **/
 - (void)_enumerateRowsInCollections:(NSArray *)collections usingBlock:
-                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	[self _enumerateRowsInCollections:collections usingBlock:block withFilter:NULL];
 }
@@ -3774,7 +3774,7 @@
  * which avoids the cost associated with deserializing the object & metadata.
 **/
 - (void)_enumerateRowsInCollections:(NSArray *)collections
-     usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+     usingBlock:(void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
      withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -3818,7 +3818,7 @@
 			{
 				YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 				
-				id object = [connection->objectCache objectForKey:cacheKey];
+				__nullable id object = [connection->objectCache objectForKey:cacheKey];
 				if (object == nil)
 				{
 					const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
@@ -3923,7 +3923,7 @@
  * allowing you to skip the serialization step for those objects you're not interested in.
 **/
 - (void)_enumerateRowsInAllCollectionsUsingBlock:
-                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
 {
 	[self _enumerateRowsInAllCollectionsUsingBlock:block withFilter:NULL];
 }
@@ -3940,7 +3940,7 @@
  * which avoids the cost associated with deserializing the object.
 **/
 - (void)_enumerateRowsInAllCollectionsUsingBlock:
-                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, id object, id metadata, BOOL *stop))block
+                (void (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key, __nullable id object, id metadata, BOOL *stop))block
      withFilter:(BOOL (NS_NOESCAPE^)(int64_t rowid, NSString *collection, NSString *key))filter
 {
 	if (block == NULL) return;
@@ -3984,7 +3984,7 @@
 		{
 			YapCollectionKey *cacheKey = [[YapCollectionKey alloc] initWithCollection:collection key:key];
 			
-			id object = [connection->objectCache objectForKey:cacheKey];
+			__nullable id object = [connection->objectCache objectForKey:cacheKey];
 			if (object == nil)
 			{
 				const void *oBlob = sqlite3_column_blob(statement, column_idx_data);
